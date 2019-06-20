@@ -8,6 +8,7 @@ import {AngularFireDatabase} from '@angular/fire/database';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {AuthService} from '../../../services/auth.service';
 import _ from 'lodash';
+import {UserDataService} from '../../../services/user-data.service';
 
 @Component({
   selector: 'app-proddetails',
@@ -30,19 +31,26 @@ export class ProddetailsComponent extends UserInformation implements OnInit {
   userID: string;
 
   constructor(private prodItemService: ProditemService,
+              private userDataService: UserDataService,
               private router: Router,
               private route: ActivatedRoute,
               private authService: AuthService,
               db: AngularFireDatabase,
+              afs: AngularFirestore,
               afAuth: AngularFireAuth) {
-    super(db, afAuth);
+    super(db, afs, afAuth);
   }
 
   ngOnInit() {
     this.getProdItems();
     this.getParamId();
-    this.getUserWishList();
-    this.getUserCart();
+    // this.getUserWishList();
+    // this.getUserCart();
+
+    this.userDataService.getWishList();
+    this.userDataService.items.subscribe(data => {
+      console.log('data', data.length);
+    });
   }
 
   getProdItems() {
@@ -66,37 +74,37 @@ export class ProddetailsComponent extends UserInformation implements OnInit {
     });
   }
 
-  getUserWishList() {
-    setTimeout(() => {
-      this.getWishList();
-      this.items.subscribe(data => {
-        for (let x = 0; x < data.length; x++) {
-          this.userWishList.push(data[x].payload.val());
-        }
-        for (let y = 0; y < this.userWishList.length; y++) {
-          if (this.uid === this.userWishList[y].uid) {
-            this.wishlisted = true;
-          }
-        }
+  // getUserWishList() {
+  //   setTimeout(() => {
+  //     this.getWishList();
+  //     this.items.subscribe(data => {
+  //       for (let x = 0; x < data.length; x++) {
+  //         this.userWishList.push(data[x].payload.val());
+  //       }
+  //       for (let y = 0; y < this.userWishList.length; y++) {
+  //         if (this.uid === this.userWishList[y].uid) {
+  //           this.wishlisted = true;
+  //         }
+  //       }
+  //
+  //     });
+  //
+  //   }, 1000);
+  // }
 
-      });
-
-    }, 1000);
-  }
-
-  getUserCart() {
-    setTimeout(() => {
-      this.getCart();
-      this.items.subscribe(data => {
-        this.userCartData = data;
-        _.forEach(this.userCartData, (res) => {
-          if (res.uid === this.uid) {
-            this.addedToCart = true;
-          }
-        });
-      });
-    }, 1000);
-  }
+  // getUserCart() {
+  //   setTimeout(() => {
+  //     this.getCart();
+  //     this.items.subscribe(data => {
+  //       this.userCartData = data;
+  //       _.forEach(this.userCartData, (res) => {
+  //         if (res.uid === this.uid) {
+  //           this.addedToCart = true;
+  //         }
+  //       });
+  //     });
+  //   }, 1000);
+  // }
 
   // toggle main image
   imgCaros(numb) {

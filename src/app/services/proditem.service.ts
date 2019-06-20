@@ -10,7 +10,7 @@ import {ProductInputModel } from '../models/allModel';
 export class ProditemService {
   itemsCollection: AngularFirestoreCollection<ProductInputModel>;
   items: Observable<ProductInputModel[]>;
-  prodItems;
+  prodItems: ProductInputModel;
   constructor(public afs: AngularFirestore) {
     this.itemsCollection = this.afs.collection('items');
   }

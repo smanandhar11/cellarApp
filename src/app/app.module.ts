@@ -38,6 +38,7 @@ import {UserService} from './services/user.service';
 import { WishlistComponent } from './shared/wishlist/wishlist.component';
 import { CartComponent } from './shared/cart/cart.component';
 import { GallerizeComponent } from './shared/gallerize/gallerize.component';
+import {UserDataService} from './services/user-data.service';
 
 @NgModule({
   declarations: [
@@ -80,7 +81,7 @@ import { GallerizeComponent } from './shared/gallerize/gallerize.component';
     FormsModule,
     AngularFireDatabaseModule
   ],
-  providers: [AuthService, ProditemService, UserService],
+  providers: [AuthService, ProditemService, UserService, UserDataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

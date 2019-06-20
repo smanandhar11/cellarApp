@@ -19,8 +19,9 @@ export class HeaderComponent extends UserInformation implements OnInit {
   constructor(public authService: AuthService,
               public router: Router,
               public db: AngularFireDatabase,
+              public afs: AngularFirestore,
               afAuth: AngularFireAuth) {
-    super(db, afAuth);
+    super(db, afs, afAuth);
   }
   ngOnInit() {
     this.authService.checkAuthState();
@@ -30,12 +31,12 @@ export class HeaderComponent extends UserInformation implements OnInit {
     this.checkAuth();
 
     // calling userService
-    setTimeout(() => {
-      this.getCart();
-      this.items.subscribe(data => {
-        this.wishlisted = data;
-      });
-    }, 1000);
+    // setTimeout(() => {
+    //   this.getCart();
+    //   this.items.subscribe(data => {
+    //     this.wishlisted = data;
+    //   });
+    // }, 1000);
   }
   login() {
     this.authService.login();

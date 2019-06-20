@@ -4,14 +4,18 @@ import {AngularFireAuth} from '@angular/fire/auth';
 import {FirebaseListObservable} from '@angular/fire/database-deprecated';
 import {AddToFavsModel} from '../../models/allModel';
 import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 export abstract class UserInformation {
   items: Observable<any>;
+  wishListItems: Observable<AddToFavsModel[]>;
+  wishListed: AddToFavsModel;
   userId: string;
-  cartRef: AngularFireList<any>;
-  wishListRef:  AngularFireList<any>;
+  cartRef: AngularFirestoreCollection<any>;
+  wishListRef:  AngularFirestoreCollection<any>;
   wishSnap: Observable<any>;
   protected constructor(public db: AngularFireDatabase,
+                        public afs: AngularFirestore,
                         private afAuth: AngularFireAuth) {
     this.afAuth.authState.subscribe(user => {
       if (user) {
@@ -25,26 +29,33 @@ export abstract class UserInformation {
   }
 
   addItemToCart(data) {
-    this.cartRef = this.db.list(`users/${this.userId}/cart`);
-    this.cartRef.push(data);
+    this.cartRef = this.afs.collection(`users/${this.userId}/cart`);
+    this.cartRef.add(data);
   }
 
   addItemToWishList(data) {
-    this.wishListRef = this.db.list(`users/${this.userId}/wishlist`);
-    this.wishListRef.push(data);
+    this.wishListRef = this.afs.collection(`users/${this.userId}/wishlist`);
+    this.wishListRef.add(data);
   }
 
   getWishList() {
-    this.items = this.db.list(`users/${this.userId}/wishlist`).snapshotChanges();
-    return this.items;
+    this.wishListItems = this.afs.collection(`users/${this.userId}/wishlist`).snapshotChanges().pipe(map(changes => {
+      return changes.map(a => {
+        const data = a.payload.doc.data() as AddToFavsModel;
+        data.id = a.payload.doc.id;
+        this.wishListed = data;
+        console.log('from service', this.wishListed);
+        return data;
+      });
+    }));
   }
 
   getCart() {
-    this.items = this.db.list(`users/${this.userId}/cart`).valueChanges();
-    return this.items;
+    // this.items = this.db.list(`users/${this.userId}/cart`).valueChanges();
+    // return this.items;
   }
-  removeWishItem(itemKey: string) {
-    this.wishListRef = this.db.list(`users/${this.userId}/wishlist`);
-    this.wishListRef.remove(itemKey);
-  }
+  // removeWishItem(itemKey: string) {
+  //   this.wishListRef = this.db.list(`users/${this.userId}/wishlist`);
+  //   this.wishListRef.remove(itemKey);
+  // }
 }
