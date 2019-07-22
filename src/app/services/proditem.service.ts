@@ -14,11 +14,11 @@ export class ProditemService {
   prodItems;
   userId: string;
   usersCollectionz: AngularFirestoreCollection<ProductInputModel>;
-  userItems$: Observable<ProductInputModel[]>;
+  userItems$: Observable<AddToFavsModel[]>;
   userItemz;
   constructor(public afs: AngularFirestore, private afAuth: AngularFireAuth) {
     this.itemsCollection = this.afs.collection('items');
-    this.usersCollection = this.afs.collection('users');
+
     this.afAuth.authState.subscribe(user => {
       if (user) {
         this.userId = user.uid;
@@ -40,7 +40,7 @@ export class ProditemService {
   }
 
   getUsers() {
-    this.userItems$ = this.afs.collection(`users/${this.userId}/cart`).snapshotChanges().pipe(map(changes => {
+    this.userItems$ = this.afs.collection(`items`).snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as AddToFavsModel;
         data.id = a.payload.doc.id;
