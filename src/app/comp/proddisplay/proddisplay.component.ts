@@ -12,6 +12,7 @@ export class ProddisplayComponent implements OnInit {
   filterType: string;
   filterPrice: string;
   filterColor: string;
+  prodUsers: prodUserModel[];
   prodTypes: ProductTypes[] = [
     {value: 'earring', viewValue: 'Earring'},
     {value: 'necklace', viewValue: 'Necklace'},
@@ -38,6 +39,11 @@ export class ProddisplayComponent implements OnInit {
       this.proditemData = data;
       console.log('prod', this.proditemData);
     });
+
+    this.prodItemService.getUsers();
+    this.prodItemService.userItems$.subscribe(data => {
+      this.prodUsers = data;
+    })
   }
 
   clearFilterType(e) {
@@ -57,4 +63,8 @@ export class ProddisplayComponent implements OnInit {
 
 
 
+}
+export interface prodUserModel {
+  name: string;
+  title: string;
 }
