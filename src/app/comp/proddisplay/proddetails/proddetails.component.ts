@@ -125,10 +125,19 @@ export class ProddetailsComponent extends UserInformation implements OnInit {
     this.router.navigate(['/bill-info', id]);
   }
 
+  // addToCart(prodData: ProductInputModel) {
+  //   this.atcData.uid = prodData.id;
+  //   if (this.isUser()) {
+  //     this.addItemToCart(this.atcData);
+  //   } else {
+  //     this.authService.login();
+  //   }
+  // }
+
   addToCart(prodData: ProductInputModel) {
     this.atcData.uid = prodData.id;
     if (this.isUser()) {
-      this.addItemToCart(this.atcData);
+      this.prodItemService.addToCart(this.atcData);
     } else {
       this.authService.login();
     }

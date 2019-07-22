@@ -43,6 +43,7 @@ export class ProddisplayComponent implements OnInit {
     this.prodItemService.getUsers();
     this.prodItemService.userItems$.subscribe(data => {
       this.prodUsers = data;
+      console.log(this.prodUsers);
     })
   }
 
