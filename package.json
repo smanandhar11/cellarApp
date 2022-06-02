@@ -15,7 +15,7 @@
     "@angular/cdk": "github:angular/cdk-builds#89f40f293288fc8e568cc01c7b79d31e25c61de0",
     "@angular/common": "^6.0.3",
     "@angular/compiler": "^6.0.3",
-    "@angular/core": "^6.0.3",
+    "@angular/core": "^11.0.5",
     "@angular/fire": "^5.0.2",
     "@angular/forms": "^6.0.3",
     "@angular/http": "^6.0.3",
